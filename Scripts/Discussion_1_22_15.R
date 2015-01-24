@@ -65,4 +65,27 @@ abline(h = actual_pair_prob, col = "RED", lty = 2)
 legend("bottomright", c("Calculated Probability", "Actual Probability"), lty = c(1, 2), col = c("Black","Red"))
 
 
+# Other functions added from a discussion to compare if() and ifelse()
+TEST = 5==6
+if(TEST){
+  # This is executed if TEST is TRUE
+}else{
+  # This is executed if TEST is FALSE
+}
+
+assign_a = function(x){
+  if(x == 6){
+   out = 10
+  }else{
+   out = 12
+  }
+  return(out)
+}#assign_a
+
+ifelsetest = function(x){
+  return(ifelse(x == 6,10, 12))  
+}
+
+
+
 

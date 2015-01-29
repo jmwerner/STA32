@@ -16,7 +16,7 @@ curve(density_function, 0, 4)
 # Repeated sampling to approximate the probability (monte carlo integration)
 probability_approx_gt = function(n, bottom_value){
 	results = sapply(1:n, function(i, number){
-		random_x = sample(((bottom_value* 10000):40000)/10000, 1)
+		random_x = sample(((number* 10000):40000)/10000, 1)
 		return(density_function(random_x))
 	}, number = bottom_value)
 	return((sum(results) / n) * (4-bottom_value))
@@ -74,7 +74,7 @@ approx_cdf_fun = function(n, a){
 }
 
 
-cdf_fun_approx = approx_cdf_fun(2)
+cdf_fun_approx = approx_cdf_fun(10000, 2)
 real_cdf_fun = cdf_fun(2)
 
 

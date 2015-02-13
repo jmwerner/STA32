@@ -1,0 +1,119 @@
+---
+title: "Craps Report"
+author: "Jeremy Werner"
+date: "Thursday, February 12, 2015"
+output: html_document
+---
+
+<!-- Here is the R markdown script from one discussion. Please view it for practice and ilustration. (Also, for reference, this text inside these arrows is an HTML comment) --> 
+
+First, let's define some functions to simulate a craps game.
+
+## Define functions
+
+1. This function returns a random di roll
+```{r}
+roll = function(){
+  return(sample(1:6,1))
+}
+```
+
+2. This function appends a given `val` to the given `input` list.
+```{r}
+list_append = function(input, val){
+  n = length(input)
+  input[[n+1]] = val
+  return(input)
+}
+```
+
+3. This function simulates a craps game and returns all of the roll totals and the points that were achieved during one round.
+```{r}
+game = function(){
+  point = 0
+  craps = FALSE
+  all_rolls = list()
+  all_points = list()
+  
+  while(!craps){
+    r1 = roll()
+    r2 = roll()
+    if(point > 0){
+      if((r1+r2) == 7){
+        craps = TRUE
+      }
+      if((r1+r2) == point){
+        all_points = list_append(all_points, point)
+        point = 0
+      }
+    }else{
+      if((r1+r2) %in% c(4,5,6,8,9,10)){
+        point = r1+r2
+      }
+    }
+    all_rolls = list_append(all_rolls, c(r1,r2)) 
+  }
+  return(list("rolls" = unlist(lapply(all_rolls, sum)), "points" = unique(unlist(all_points))))
+}
+
+```
+
+
+4. This function will simulate one game and return the corresponding winnings for the given `bet` amount if a fire bet is achieved.
+```{r}
+fire_bet = function(bet){
+  win = 0
+  game_data = game()
+  unique_p = length(game_data$points)
+  if(unique_p > 3){
+    win = bet * c(25, 250, 1000)[unique_p - 3]
+  }
+  return(win)
+}
+
+```
+
+5. This function will simulate `rounds` number of craps games and return the net winnings for *only* fire bets corresponding to the bet amount `in_bet`.
+```{r}
+fire_bet_winnings = function(rounds, in_bet){
+  win_vector = sapply(1:rounds, function(i, bet2){
+    return(fire_bet(bet2))
+  }, bet2 = in_bet)
+  net_winnings = -1 * rounds * in_bet + sum(win_vector)
+  return(net_winnings)
+}
+```
+
+
+## Simulations
+
+1. Simulated net winnings for betting $5 on a fire bet for 1000 rounds
+```{r}
+fire_bet_winnings(1000,5)
+```
+
+2. Simulated net winnings for betting $1 on a fire bet for 10000 rounds
+```{r}
+fire_bet_winnings(10000,1)
+```
+
+3. Plot of fire bet winnings for a $5 bet over 1000 rounds
+
+```{r, echo = FALSE}
+x = 1:1000
+y = sapply(x, function(i){return(fire_bet(5))})
+indices = as.numeric(y > 0) + 1
+plot(x,y, col = c("black", "red")[indices], pch = c(".","W")[indices], xlab = "Game Number", ylab = "Fire Bet Winnings")
+```
+
+4. Total winnings for above simulation
+```{r, echo=FALSE}
+sum(y)
+```
+
+(Misc from discussion) 
+
+#### THIS. IS. MARKDOWN!!!
+
+Here is some math: $\sum\limits_{i=1}^{500} x_i^2\alpha$
+

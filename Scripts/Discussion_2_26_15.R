@@ -73,7 +73,8 @@ t1 = plot_density(poisson_means(50, n_input, lambda_input), n_input, lambda_inpu
 
 n_sequence_in = (3:18)*4
 N_sequence_in = (5:25)*4
-persp_plots(n_sequence_in, N_sequence_in)
+persp_plots(n_sequence_in, N_sequence_in, 1)
+persp_plots(n_sequence_in, N_sequence_in, 2)
 
 n_sequence_in = (3:8)*2
 N_sequence_in = (5:15)*2
